@@ -128,7 +128,7 @@
     <record id="crm_salon_action" model="ir.actions.act_window">
         <field name="name">Salones</field>
         <field name="res_model">crm.salon</field>
-        <field name="view_mode">calendar,tree,form</field>
+        <field name="view_mode">tree,form</field>
         <!-- <field name="search_view_id" ref="view_crm_salon_search"/> -->
         <!-- <field name="context">{"search_default_stage_id":1}</field>
         <field name="search_view_id" ref="view_crm_salon_search"/> -->
