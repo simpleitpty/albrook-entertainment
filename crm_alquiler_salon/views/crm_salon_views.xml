@@ -9,7 +9,7 @@
         <field name="inherit_id" ref="crm.crm_case_calendar_view_leads" />
         <field name="arch" type="xml">
         <xpath expr="/calendar" position="replace">
-            <calendar string="Reservaciones"  date_start="date_begin" event_open_popup="true" color="salon_id" mode="month" quick_add="False">
+            <calendar string="Reservaciones"  date_start="date_begin" date_stop="date_end" event_open_popup="true" color="salon_id" mode="month" quick_add="False">
             <field name="stage_id" string="Estado"/>
             <field name="salon_id"/>
             <field name="vendedor_id"/>
@@ -166,7 +166,7 @@
             <field name="phone" position="after">
 
                 <!-- <field name="media" /> -->
-                <field name="partner_cumple_ids"  domain="[('parent_id', '=', partner_id)]" />
+                <field name="partner_cumple_ids" context="{'partner_id':context.get('partner_id')}"  domain="[('parent_id', '=', partner_id)]" />
 <!--                 <field name="media" />
  -->              <!--   <field name="partner_cumple_ids" />
                 <field name="media" /> -->
@@ -183,6 +183,7 @@
             </field>
             <field name="vendedor_id" position="after">
                 <field name="tipo_venta"  />
+                
             </field>
             <field name="team_id" position="replace">
                 <field name="team_id" invisible="1" />
@@ -235,6 +236,38 @@
                 <field name="fecha_nacimiento" />
                 <field name="edad" />
             </field> -->
+            <!-- <field name="street" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field>
+            <field name="street2" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field> -->
+
+            <!-- <xpath expr="//form/sheet/div/group/group/label[@name='address_name']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath> -->
+            <!-- <xpath expr="//form/sheet/div/div/label[@name='address_name']" position="attributes">
+                    <attribute name="string">My Company</attribute>
+                </xpath> -->
+
+
+             <xpath expr="//group/group/label[@name='address_name']" position="attributes">
+                <attribute name="string">Tipo de Contacto</attribute>
+                </xpath>
+            <xpath expr="//field[@name='street']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='street2']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+           <!--  <xpath expr="//label[@string='Company Address']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath> -->
+
+            
+            <field name="street2" position="after">
+                <field name="tipo_contacto"  />
+            </field>
 
             <field name="parent_id" position="replace">
                 <field name="parent_id" invisible="1" />
@@ -282,10 +315,12 @@
                 <field name="street2" invisible="1" />
             </field> -->
 
-            <xpath expr="//label[@for='street']" position="attributes"> 
+            <!-- <xpath expr="//label[@for='street']" position="attributes">  -->
                 <!-- <attribute name="groups">sale.group_delivery_invoice_address</attribute>  -->
-                <attribute name="string">Direccion</attribute> 
-            </xpath> 
+               <!--  <attribute name="string">Direccion</attribute> 
+            </xpath>  -->
+
+             
 
 
             
@@ -326,14 +361,6 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-              <!--       <button name="action_submit" type="object"
-                            string="Submit" states="draft"
-                            class="oe_highlight" invisible="context.get('is_modal')"/>
-                    <button name="action_submit" type="object"
-                            string="Retry" states="error"
-                            class="oe_highlight"/>
-                <field name="state" nolabel="1" colspan="2" widget="statusbar" statusbar_visible="draft,open,done"/>
- -->
                 </header>
                 <sheet>
                     
@@ -377,5 +404,66 @@
         parent="crm.crm_menu_config"
         action="crm_tipo_venta_action"
         sequence="35"/>
+
+
+    <record id="crm_tipo_contacto_form" model="ir.ui.view">
+        <field name="name">crm.tipo.contacto.form</field>
+        <field name="model">crm.tipo.contacto</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                </header>
+                <sheet>
+                    
+                    <group>
+                        <group >
+                            <field name="name"/>
+                      <!--       <field name="genera_oportunidad"/>
+                            <field name="dias_generacion"/> -->
+                             </group>
+                 
+                    </group>
+                  
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="crm_tipo_contacto_tree" model="ir.ui.view">
+        <field name="name">crm.contacto.tree</field>
+        <field name="model">crm.tipo.contacto</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+           <!--      <field name="genera_oportunidad"/>
+                <field name="dias_generacion"/> -->
+     
+            </tree>
+        </field>
+    </record>
+
+    <record id="crm_tipo_contacto_action" model="ir.actions.act_window">
+        <field name="name">Tipo de Contacto</field>
+        <field name="res_model">crm.tipo.contacto</field>
+        <field name="view_mode">tree,form</field>
+
+    </record>
+
+    <menuitem
+        id="crm_tipo_contacto"
+        name="Tipo Contacto"
+        parent="crm.crm_menu_config"
+        action="crm_tipo_contacto_action"
+        sequence="36"/>
+
+    <menuitem
+        id="crm_media"
+        name="Media"
+        parent="crm.crm_menu_config"
+        action="utm.utm_medium_action"
+        sequence="35"/>
+
+
+
 
 </odoo>
