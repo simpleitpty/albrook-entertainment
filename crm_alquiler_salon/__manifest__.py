@@ -10,6 +10,7 @@
     	'security/crm_salon_security.xml',
         'security/ir.model.access.csv',
         'views/crm_salon_views.xml',
+        'data/cron.xml',
 
     ],
   

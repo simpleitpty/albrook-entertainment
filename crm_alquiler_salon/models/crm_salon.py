@@ -12,6 +12,12 @@ from odoo.exceptions import UserError, AccessError
 from odoo.addons.phone_validation.tools import phone_validation
 from collections import OrderedDict
 
+import time
+
+import datetime
+
+from datetime import datetime, date, time 
+
 
 
 
@@ -96,6 +102,56 @@ class Lead(models.Model):
     date_end = fields.Datetime('Fecha Fin', readonly=False)
     vendedor_id = fields.Many2one('crm.vendedor','Vendedor')
     tipo_venta = fields.Many2one('crm.tipo.venta','Tipo Venta')
+
+    @api.model
+    def genera_oprotunidad(self):
+        # import pdb
+        # pdb.set_trace()
+        to_sync_items = self.search([('stage_id', 'in', (1,4))])
+        values = {}
+        for to_sync_item in to_sync_items:
+            if to_sync_item.tipo_venta.genera_oportunidad == True:
+                # fecha_evento = to_sync_item.date_begin
+                fecha_evento_str = to_sync_item.date_begin.strftime('%Y-%m-%d')
+                fecha_evento = datetime.strptime(fecha_evento_str,'%Y-%m-%d')
+                anio = fecha_evento.year
+                mes = fecha_evento.month
+                mes_new = mes + int(to_sync_item.tipo_venta.dias_generacion)
+                if mes_new > 12:
+                    mes_new_cociente = mes_new // 12
+                    mes_new_resto = mes_new % 12
+                    if mes_new_resto == 0:
+                        current_date=fecha_evento.replace(year=fecha_evento.year+mes_new_cociente, month=12)
+                    else:
+                        current_date=fecha_evento.replace(year=fecha_evento.year+mes_new_cociente, month=mes_new_resto)
+                else:
+                    current_date=fecha_evento.replace(month=mes_new)
+                if current_date.strftime('%Y-%m-%d') == date.today().strftime('%Y-%m-%d'):
+                    values['name'] = to_sync_item.name
+                    values['partner_id'] = to_sync_item.partner_id.id
+                    values['partner_cumple_ids'] = to_sync_item.partner_cumple_ids.id
+                    values['vendedor_id'] = to_sync_item.vendedor_id.id
+                    values['tipo_venta'] = to_sync_item.tipo_venta.id
+                    values['salon_id'] = to_sync_item.salon_id.id
+                    # values['date_begin'] = to_sync_item.date_begin
+                    # values['date_end'] = to_sync_item.date_end
+                    self.create(values)
+
+                # fecha_evento_day = 
+
+            # partner = to_sync_item.partner_id
+
+            # params = {
+            #     'partner_gid': partner.partner_gid,
+            # }
+
+            # if partner.vat and partner._is_vat_syncable(partner.vat):
+            #     params['vat'] = partner.vat
+            #     result, error = partner._rpc_remote_api('update', params)
+            #     if error:
+            #         _logger.error('Send Partner to sync failed: %s' % str(error))
+
+            # to_sync_item.write({'synched': True})
     
 
 
