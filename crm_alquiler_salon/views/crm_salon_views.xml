@@ -198,19 +198,20 @@
                 <field name="company_id" invisible="1" />
             </field>
             <field name="tipo_venta" position="after">
-                
-                
+                <!-- attrs="{'required': [('tipo_venta', '=', True)]}"  -->
+                <!-- domain="[('tipo_venta.genera_oportunidad', '=', True)]" -->
                 <!-- <group> -->
                              <label for="date_begin" string="Fecha Alquiler"/>
                                 <div class="o_row">
-                                    <field name="date_begin" widget="daterange" nolabel="1" class="oe_inline" options="{'related_end_date': 'date_end'}"/>
+                                    <field name="date_begin" widget="daterange" nolabel="1" class="oe_inline" options="{'related_end_date': 'date_end'}" attrs="{'required': [('usa_oportunidad', '=', True)]}" />
                                     <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"/>
-                                    <field name="date_end" widget="daterange" nolabel="1" class="oe_inline" options="{'related_start_date': 'date_begin'}"/>
+                                    <field name="date_end" widget="daterange" nolabel="1" class="oe_inline" options="{'related_start_date': 'date_begin'}" attrs="{'required': [('usa_oportunidad', '=', True)]}" />
                                 </div>
                         <!-- </group> -->
             </field>
             <field name="partner_cumple_ids" position="after" >
                         <field name="salon_id" />
+                        <field name="usa_oportunidad" invisible="1"/>
                     </field>
             <field name="date_end" position="after" >        
                     <button string="Reservaciones" name="view_reservations" lass="oe_stat_button" icon="fa-calendar"  type="object"  widget="statinfo"/>
@@ -263,6 +264,55 @@
            <!--  <xpath expr="//label[@string='Company Address']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath> -->
+
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/field[@name='type']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='email']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='phone']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='mobile']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='street']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='street2']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='city']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='state_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='zip']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='country_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='comment']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="/form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/label[@for='street']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="/form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='name']" position="after">
+                <!-- <attribute name="string">Fecha de Nacimiento</attribute> -->
+                <field name="fecha_nacimiento"  />
+                <field name="edad" />
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='image_1920']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='image_1920']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
 
             
             <field name="street2" position="after">

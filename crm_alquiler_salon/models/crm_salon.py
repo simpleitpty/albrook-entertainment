@@ -102,6 +102,18 @@ class Lead(models.Model):
     date_end = fields.Datetime('Fecha Fin', readonly=False)
     vendedor_id = fields.Many2one('crm.vendedor','Vendedor')
     tipo_venta = fields.Many2one('crm.tipo.venta','Tipo Venta')
+    usa_oportunidad = fields.Boolean('Usa oportunidad')
+
+
+    @api.onchange('tipo_venta')
+    def _onchange_tipo_venta(self):
+        # hoy = date.today()
+        if self.tipo_venta.genera_oportunidad == True:
+            self.usa_oportunidad = True
+        else:
+            self.usa_oportunidad = False
+
+            
 
     @api.model
     def genera_oprotunidad(self):
@@ -224,6 +236,23 @@ class Partner(models.Model):
     edad = fields.Integer('Edad')
     fecha_nacimiento = fields.Date('Fecha de Nacimiento')
     tipo_contacto = fields.Many2one('crm.tipo.contacto','Tipo Contacto')
+
+    @api.onchange('fecha_nacimiento')
+    def _onchange_fecha_nacimiento(self):
+        hoy = date.today()
+        if self.fecha_nacimiento:
+            if hoy < self.fecha_nacimiento:
+                self.edad = 0
+                raise UserError(_('Erro en la Fecha de Nacimiento'))
+
+            else:
+                edad = date.today().year - self.fecha_nacimiento.year
+            self.edad = edad
+
+     
+
+
+    # fecha_nacimiento
 
     # @api.model
     # def create(self, vals):
