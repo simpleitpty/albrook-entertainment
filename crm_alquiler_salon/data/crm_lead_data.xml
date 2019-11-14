@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- <data > -->
+        <data noupdate="1">
+
+        <!--Definition of an email template with an empty body that will be used in opportunity mailing.
+            Used to give a basis for email recipients, name and to ease the definition of a further
+            elaborated template.  -->
+        <record id="email_template_recordatorio_vendedor_mail" model="mail.template">
+            <field name="name">Recordatorio Vendedor</field>
+            <field name="model_id" ref="crm_alquiler_salon.model_crm_lead"/>
+            <!-- <field name="partner_to">${object.partner_id != False and object.partner_id.id}</field> -->
+            <field name="email_from">${(mail@gmail.com)}</field>
+            <field name="email_to">${(object.vendedor_id.correo)}</field>
+            <field name="subject">Oportunidad (Ref ${object.name or 'n/a'})</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+        Estimado/a
+        <br /><br />
+        La oportunidad:
+             <strong>${object.name}</strong>
+        lleva tres dias sin seguimiento, por favor dar atencion a la oportunidad
+        <br /><br />
+        Saludos cordiales,
+        <br /><br />
+        Administrador
+
+    </p>
+</div>
+            </field>
+            <!-- <field name="lang">${object.partner_id.lang}</field> -->
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

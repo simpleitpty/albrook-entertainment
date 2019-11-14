@@ -212,6 +212,7 @@
             <field name="partner_cumple_ids" position="after" >
                         <field name="salon_id" />
                         <field name="usa_oportunidad" invisible="1"/>
+                        <field name="sla_num" invisible="1"/>
                     </field>
             <field name="date_end" position="after" >        
                     <button string="Reservaciones" name="view_reservations" lass="oe_stat_button" icon="fa-calendar"  type="object"  widget="statinfo"/>

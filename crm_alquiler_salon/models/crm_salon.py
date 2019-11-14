@@ -103,6 +103,16 @@ class Lead(models.Model):
     vendedor_id = fields.Many2one('crm.vendedor','Vendedor')
     tipo_venta = fields.Many2one('crm.tipo.venta','Tipo Venta')
     usa_oportunidad = fields.Boolean('Usa oportunidad')
+    estado_new_oportunidad = fields.Boolean('Oportunidad Generada')
+    sla_num =fields.Integer('SLA')
+
+
+    @api.model
+    def create(self, vals):
+ 
+        if vals.get('partner_cumple_ids') and vals.get('partner_id'):
+            self.env['res.partner'].browse(int(vals['partner_cumple_ids'])).write({'parent_id':int(vals['partner_id'])})
+        return super(Lead, self).create(vals)
 
 
     @api.onchange('tipo_venta')
@@ -113,13 +123,79 @@ class Lead(models.Model):
         else:
             self.usa_oportunidad = False
 
+    @api.model
+    def recordatorio_vendedor_3(self):
+       
+        crm_ids = self.search([])
+        for det in crm_ids:
+            # fecha_ultimo_write = det.write_date
+
+            fecha_ultimo_write_str = det.write_date.strftime('%Y-%m-%d')
+            fecha_ultimo_write = datetime.strptime(fecha_ultimo_write_str,'%Y-%m-%d')
+            dias_diferencia = date.today() - fecha_ultimo_write.date()
+            if dias_diferencia.days == 3:
+                det.write({'sla_num':1})
+                template_id = self.env.ref('crm_alquiler_salon.email_template_recordatorio_vendedor_mail').id
+                template = self.env['mail.template'].browse(template_id)
+                template.send_mail(det.id, force_send=True)
+
+    @api.model
+    def recordatorio_vendedor_1(self):
+      
+        crm_ids = self.search([])
+        for det in crm_ids:
+            # fecha_ultimo_write = det.write_date
+
+            fecha_ultimo_write_str = det.write_date.strftime('%Y-%m-%d')
+            fecha_ultimo_write = datetime.strptime(fecha_ultimo_write_str,'%Y-%m-%d')
+            dias_diferencia = date.today() - fecha_ultimo_write.date()
+            if dias_diferencia.days == 0:
+                det.write({'sla_num':1})
+                template_id = self.env.ref('crm_alquiler_salon.email_template_recordatorio_vendedor_mail').id
+                template = self.env['mail.template'].browse(template_id)
+                template.send_mail(det.id, force_send=True)
+
+
+
+
+
+
+    # def action_send_mail(self):
+    #     self.ensure_one()
+    #     if not self.env.user.has_group('hr.group_hr_manager'):
+    #         raise UserError(_("You don't have the right to do this. Please contact an Administrator."))
+    #     if not self.work_email:
+    #         raise UserError(_("There is no professional email address for this employee."))
+    #     template = self.env.ref('hr_presence.mail_template_presence', False)
+    #     compose_form = self.env.ref('mail.email_compose_message_wizard_form', False)
+    #     ctx = dict(
+    #         default_model="hr.employee",
+    #         default_res_id=self.id,
+    #         default_use_template=bool(template),
+    #         default_template_id=template.id,
+    #         default_composition_mode='comment',
+    #         default_is_log=True,
+    #         custom_layout='mail.mail_notification_light',
+    #     )
+    #     return {
+    #         'name': _('Compose Email'),
+    #         'type': 'ir.actions.act_window',
+    #         'view_mode': 'form',
+    #         'res_model': 'mail.compose.message',
+    #         'views': [(compose_form.id, 'form')],
+    #         'view_id': compose_form.id,
+    #         'target': 'new',
+    #         'context': ctx,
+    #     }
+
+
             
 
     @api.model
     def genera_oprotunidad(self):
         # import pdb
         # pdb.set_trace()
-        to_sync_items = self.search([('stage_id', 'in', (1,4))])
+        to_sync_items = self.search(['|',('active','=',False),'&',('stage_id', '=', 4),('estado_new_oportunidad','=',False)])
         values = {}
         for to_sync_item in to_sync_items:
             if to_sync_item.tipo_venta.genera_oportunidad == True:
@@ -147,7 +223,9 @@ class Lead(models.Model):
                     values['salon_id'] = to_sync_item.salon_id.id
                     # values['date_begin'] = to_sync_item.date_begin
                     # values['date_end'] = to_sync_item.date_end
+
                     self.create(values)
+                    to_sync_item.write({'estado_new_oportunidad': True})
 
                 # fecha_evento_day = 
 
