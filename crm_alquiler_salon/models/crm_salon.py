@@ -47,16 +47,6 @@ class CrmVendedor(models.Model):
 
     name = fields.Char(string='Nombre Vendedor')
     correo = fields.Char('Correo')
-    # state = fields.Selection([
-    #     ('draft', 'Libre'),
-    #     ('abonado', 'Abonado'),
-    #     ('done', 'Reservado'),
-    # ], string="Estado Reservacion",default='draft')
-    # date_begin = fields.Datetime('Fecha Inicio', readonly=False)
-    # date_end = fields.Datetime('Fecha Fin', readonly=False)
-    # company_id = fields.Many2one('res.company', string='Company',default=lambda self: self.env.company)
-    # capacidad = fields.Integer(string='Capacidad')
-
 
 CrmVendedor()
 
@@ -91,6 +81,15 @@ CrmTipoContacto()
     #     ('name_uniq', 'unique (name)', 'Tag name already exists!'),
     # ]
 
+class CrmPaquetes(models.Model):
+    _name = 'crm.paquete'
+
+    name = fields.Char(string='Nombre Paquete')
+    company_id = fields.Many2one('res.company', string='Company',default=lambda self: self.env.company)
+
+CrmPaquetes()
+
+
 class Lead(models.Model):
     _inherit = "crm.lead"
 
@@ -105,6 +104,12 @@ class Lead(models.Model):
     usa_oportunidad = fields.Boolean('Usa oportunidad')
     estado_new_oportunidad = fields.Boolean('Oportunidad Generada')
     sla_num =fields.Integer('SLA')
+    cantidad_invitados_c1 = fields.Integer('Cantidad de Invitados')
+    cantidad_invitados_c2 = fields.Integer('Cantidad de Invitados')
+    cantidad_canchas = fields.Integer('Cantidad de Canchas')
+    paquete = fields.Many2one('crm.paquete','Paquetes')
+    # paquete_c2 = 
+
 
 
     @api.model
@@ -113,6 +118,15 @@ class Lead(models.Model):
         if vals.get('partner_cumple_ids') and vals.get('partner_id'):
             self.env['res.partner'].browse(int(vals['partner_cumple_ids'])).write({'parent_id':int(vals['partner_id'])})
         return super(Lead, self).create(vals)
+
+    def write(self, vals):
+        # import pdb
+        # pdb.set_trace()
+        if vals.get('partner_cumple_ids'):
+            self.env['res.partner'].browse(int(vals['partner_cumple_ids'])).write({'parent_id':int(self.partner_id.id)})
+        res = super(Lead, self).write(vals)
+        # self._validate_cashbox()
+        return res
 
 
     @api.onchange('tipo_venta')
