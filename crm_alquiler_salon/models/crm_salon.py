@@ -108,6 +108,8 @@ class Lead(models.Model):
     cantidad_invitados_c2 = fields.Integer('Cantidad de Invitados')
     cantidad_canchas = fields.Integer('Cantidad de Canchas')
     paquete = fields.Many2one('crm.paquete','Paquetes')
+    ultima_actividad = fields.Char('Ultima Actividad')
+
     # paquete_c2 = 
 
 
@@ -328,6 +330,9 @@ class Partner(models.Model):
     edad = fields.Integer('Edad')
     fecha_nacimiento = fields.Date('Fecha de Nacimiento')
     tipo_contacto = fields.Many2one('crm.tipo.contacto','Tipo Contacto')
+    user_create = fields.Many2one('res.users','Usuario Creador')
+    ruc = fields.Char('Ruc',size=13)
+    div = fields.Char('Dv')
 
     @api.onchange('fecha_nacimiento')
     def _onchange_fecha_nacimiento(self):
@@ -335,11 +340,22 @@ class Partner(models.Model):
         if self.fecha_nacimiento:
             if hoy < self.fecha_nacimiento:
                 self.edad = 0
-                raise UserError(_('Erro en la Fecha de Nacimiento'))
+                raise UserError(_('Error en la Fecha de Nacimiento'))
 
             else:
                 edad = date.today().year - self.fecha_nacimiento.year
             self.edad = edad
+
+    @api.model
+    def create(self, vals):
+        # import pdb
+        # pdb.set_trace()
+
+        vals.update({'user_create':self.env.uid })
+ 
+        # if vals.get('partner_cumple_ids') and vals.get('partner_id'):
+            # self.env['res.partner'].browse(int(vals['partner_cumple_ids'])).write({'parent_id':int(vals['partner_id'])})
+        return super(Partner, self).create(vals)
 
      
 
@@ -354,10 +370,38 @@ class Partner(models.Model):
         # if partner_cumple_ids:
         #     vals['parent_id'] = self._get_tags_create_vals(tag_name, vals.get('country_id'))
         # return super(Partner, self).create(vals)
+
+class Message(models.Model):
+
+    _inherit = "mail.message"
+
+    @api.model
+    def create(self, vals):
+        # import pdb
+        # pdb.set_trace()
+        tipo_crm = vals.get('model')
+        if tipo_crm == 'crm.lead':
+            crm_lead_id = self.env['crm.lead'].search([('id','=',int(vals.get('res_id')))])
+
+            self.env['crm.lead'].browse(crm_lead_id.id).write({'ultima_actividad':vals.get('body')})
+        return super(Message, self).create(vals)
     
 
-# class MassMailing(models.Model):
-#     _inherit = "crm.lead"
+class MailActivity(models.Model):
+    _inherit = 'mail.activity'
 
-#     salon_id = fields.Many2one('crm.salon','Salon')
-#     mobile = fields.Char('Movil')
+    @api.model
+    def create(self, vals):
+        # import pdb
+        # pdb.set_trace()
+        tipo_crm = self.env['ir.model'].search([('id','=',vals.get('res_model_id'))]).model
+        ultima_actividad = ''
+
+        if tipo_crm == 'crm.lead':
+            crm_lead_id = self.env['crm.lead'].browse(vals.get('res_id'))
+            # if vals.get('activity_type_id') == :
+                # ultima_actividad = vals.get('summary')
+
+            self.env['crm.lead'].browse(crm_lead_id.id).write({'ultima_actividad':vals.get('summary')})
+        return super(MailActivity, self).create(vals)
+

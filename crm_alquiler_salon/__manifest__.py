@@ -5,7 +5,7 @@
     'name': 'Alquiler y Reservacion de Salones',
     'summary': 'Alquiler y Reservacion de Salones ',
     'category': 'Sales/CRM',
-    'depends': ['crm','utm'],
+    'depends': ['crm','utm','crm_enterprise'],
     'data': [
     	'security/crm_salon_security.xml',
         'security/ir.model.access.csv',
