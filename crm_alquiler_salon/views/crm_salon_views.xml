@@ -19,6 +19,20 @@
         </field>
     </record>
 
+    <record id="crm_case_tree_view_oppor_inherit" model="ir.ui.view">
+            <field name="name">crm.lead.tree.opportunity.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_tree_view_oppor" />
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="ultima_actividad"/>
+                </tree>
+
+
+            </field>
+        </record>
+
+
 
 
     <record id="crm_salon_form" model="ir.ui.view">
@@ -224,21 +238,32 @@
                         <field name="sla_num" invisible="1"/>
                     </field>
 
-          <!--   <field name="date_end" position="after" >
-                        <field name="paquete" domain="[('company_id', '=', company_id)]"  />
-                        <field name="cantidad_canchas" attrs="{'invisible': [('company_id', '=', 2)]}" />
-                    </field> -->
-
             <field name="date_end" position="after" >       
                     <button string="Reservaciones" name="view_reservations" lass="oe_stat_button" icon="fa-calendar"  type="object"  widget="statinfo"/>
             </field>
 
-           <!--  <div>
-            <group>
-                    
-                </group>
-            </div> -->
+            <field name="description" position="after" >
+                <group>
+                <field name="ultima_actividad" invisible="1"/>
+            </group>
+            </field>
 
+            <xpath expr="//form/sheet/notebook/page[@name='lead']/group/group[1]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='lead']/group/group[2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='lead']/group/group[4]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='lead']/group/group[3]" position="attributes">
+                <attribute name="string">Contacto</attribute>
+            </xpath>
+
+
+
+            
 
         </field>
     </record>
@@ -271,6 +296,16 @@
              <xpath expr="//group/group/label[@name='address_name']" position="attributes">
                 <attribute name="string">Tipo de Contacto</attribute>
                 </xpath>
+
+            <xpath expr="//group/group/label[@name='address_name']" position="attributes">
+                <!-- <attribute name="string">Tipo de Contacto</attribute> -->
+                <attribute name="invisible">1</attribute>
+                </xpath>
+
+            <!-- <xpath expr="//group/group/label[@name='tipo_contacto']" position="attributes">
+                <attribute name="invisible">1</attribute>
+                </xpath> -->
+
             <xpath expr="//field[@name='street']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
@@ -328,12 +363,29 @@
             <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='image_1920']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='sales_purchases']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
 
 
             
             <field name="street2" position="after">
-                <field name="tipo_contacto"  />
+                <field name="tipo_contacto"  invisible="1" />
+                <!-- <group>
+                <field name="ruc" attrs="{'invisible': [('company_type', '=', 'person')]}"  />
+                <field name="div" attrs="{'invisible': [('company_type', '=', 'person')]}" />
+                </group> -->
             </field>
+
+
+            <label for="" name="address_name" position="before">
+            <!-- <field name="field_name"/> -->
+            <field name="ruc" attrs="{'invisible': [('company_type', '=', 'person')]}"  />
+            <!-- <label for="ruc" attrs="{'invisible': [('company_type', '=', 'person')]}" /> -->
+            <field name="div" attrs="{'invisible': [('company_type', '=', 'person')]}" />
+            <!-- <label for="div" attrs="{'invisible': [('company_type', '=', 'person')]}" /> -->
+        </label>
+
 
             <field name="parent_id" position="replace">
                 <field name="parent_id" invisible="1" />
@@ -369,10 +421,13 @@
                 <field name="function" invisible="1" />
             </field>
             <field name="company_type" position="replace">
-                <field name="company_type" invisible="1" />
+                <field name="company_type" invisible="0" widget="radio" options="{'horizontal': true}" />
             </field>
-            <field name="ref" position="after">
+            <field name="title" position="after">
                 <field name="fecha_nacimiento" invisible="0" />
+            </field>
+            <field name="fecha_nacimiento" position="after">
+                <field name="user_create" invisible="0"  readonly="1"/>
             </field>
             <!-- <field name="street2" position="after">
                 <field name="title" />
@@ -585,6 +640,18 @@
         action="crm_vendedor_action"
         sequence="37"/>
 
+
+    <!-- <record id="crm_lead_view_dashboard_view_new" model="ir.ui.view">
+            <field name="name">crm.lead.view.dashboard.lead.inherit.new</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm_enterprise.crm_opportunity_view_dashboard"/>
+            <field name="arch" type="xml">
+                <xpath expr="view[@type='cohort']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+ -->
 
 
 
