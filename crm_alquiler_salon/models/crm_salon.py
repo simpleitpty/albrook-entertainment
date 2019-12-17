@@ -116,9 +116,15 @@ class Lead(models.Model):
 
     @api.model
     def create(self, vals):
- 
+        import pdb
+        pdb.set_trace()
         if vals.get('partner_cumple_ids') and vals.get('partner_id'):
-            self.env['res.partner'].browse(int(vals['partner_cumple_ids'])).write({'parent_id':int(vals['partner_id'])})
+            phone = self.env['res.partner'].browse(int(vals['partner_id'])).phone
+            mobile = self.env['res.partner'].browse(int(vals['partner_id'])).mobile
+            email = self.env['res.partner'].browse(int(vals['partner_id'])).email
+            self.env['res.partner'].browse(int(vals['partner_cumple_ids'])).write({'parent_id':int(vals['partner_id']),'phone':phone
+                ,'mobile':mobile,'email':email})
+
         return super(Lead, self).create(vals)
 
     def write(self, vals):
@@ -352,6 +358,7 @@ class Partner(models.Model):
         # pdb.set_trace()
 
         vals.update({'user_create':self.env.uid })
+
  
         # if vals.get('partner_cumple_ids') and vals.get('partner_id'):
             # self.env['res.partner'].browse(int(vals['partner_cumple_ids'])).write({'parent_id':int(vals['partner_id'])})
