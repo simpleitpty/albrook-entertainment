@@ -116,8 +116,7 @@ class Lead(models.Model):
 
     @api.model
     def create(self, vals):
-        import pdb
-        pdb.set_trace()
+      
         if vals.get('partner_cumple_ids') and vals.get('partner_id'):
             phone = self.env['res.partner'].browse(int(vals['partner_id'])).phone
             mobile = self.env['res.partner'].browse(int(vals['partner_id'])).mobile
