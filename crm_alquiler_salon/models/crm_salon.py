@@ -377,20 +377,20 @@ class Partner(models.Model):
         #     vals['parent_id'] = self._get_tags_create_vals(tag_name, vals.get('country_id'))
         # return super(Partner, self).create(vals)
 
-class Message(models.Model):
+# class Message(models.Model):
 
-    _inherit = "mail.message"
+#     _inherit = "mail.message"
 
-    @api.model
-    def create(self, vals):
-        # import pdb
-        # pdb.set_trace()
-        tipo_crm = vals.get('model')
-        if tipo_crm == 'crm.lead':
-            crm_lead_id = self.env['crm.lead'].search([('id','=',int(vals.get('res_id')))])
+#     @api.model
+#     def create(self, vals):
+#         # import pdb
+#         # pdb.set_trace()
+#         tipo_crm = vals.get('model')
+#         if tipo_crm == 'crm.lead':
+#             crm_lead_id = self.env['crm.lead'].search([('id','=',int(vals.get('res_id')))])
 
-            self.env['crm.lead'].browse(crm_lead_id.id).write({'ultima_actividad':vals.get('body')})
-        return super(Message, self).create(vals)
+#             self.env['crm.lead'].browse(crm_lead_id.id).write({'ultima_actividad':vals.get('body')})
+#         return super(Message, self).create(vals)
     
 
 class MailActivity(models.Model):
