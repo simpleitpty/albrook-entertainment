@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_crm_salon_manager,crm.salon.manager,model_crm_salon,crm_alquiler_salon.group_crm_salon_manager,1,1,1,1
+access_crm_salon_user,crm.salon.user,model_crm_salon,crm_alquiler_salon.group_crm_salon_user,1,1,1,0
+,,,,,,,
+,,,,,,,
+access_crm_vendedor_manager,crm.salon.manager,model_crm_vendedor,crm_alquiler_salon.group_crm_salon_manager,1,1,1,1
+access_crm_vendedor_user,crm.salon.user,model_crm_vendedor,crm_alquiler_salon.group_crm_salon_user,1,1,1,0
+,,,,,,,
+access_crm_tipoventa_manager,crm.salon.manager,model_crm_tipo_venta,crm_alquiler_salon.group_crm_salon_manager,1,1,1,1
+access_crm_tipoventa_user,crm.salon.user,model_crm_tipo_venta,crm_alquiler_salon.group_crm_salon_user,1,1,1,0
+,,,,,,,
+,,,,,,,
+access_crm_ticontacto_manager,crm.salon.manager,model_crm_tipo_contacto,crm_alquiler_salon.group_crm_salon_manager,1,1,1,1
+access_crm_tipocontacto_user,crm.salon.user,model_crm_tipo_contacto,crm_alquiler_salon.group_crm_salon_user,1,1,1,0
+,,,,,,,
+access_crm_paquete_manager,crm.salon.manager,model_crm_paquete,crm_alquiler_salon.group_crm_salon_manager,1,1,1,
+access_crm_paquete_user,crm.salon.user,model_crm_paquete,crm_alquiler_salon.group_crm_salon_user,1,1,1,

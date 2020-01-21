@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record model="ir.ui.view" id="view_crm_calendar_inherit">
+        <field name="name">Eventos Calendar</field>
+        <field name="model">crm.lead</field>
+        <field name="priority" eval="1"/>
+        <field name="inherit_id" ref="crm.crm_case_calendar_view_leads" />
+        <field name="arch" type="xml">
+        <xpath expr="/calendar" position="replace">
+            <calendar string="Reservaciones"  date_start="date_begin" date_stop="date_end" event_open_popup="true" color="salon_id" mode="month" quick_add="False">
+            <field name="stage_id" string="Estado"/>
+            <field name="salon_id"/>
+            <field name="vendedor_id"/>
+            <!-- <field name="show_as"/> -->
+            </calendar>
+        </xpath>
+        </field>
+    </record>
+
+    <record id="crm_case_tree_view_oppor_inherit" model="ir.ui.view">
+            <field name="name">crm.lead.tree.opportunity.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_tree_view_oppor" />
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="ultima_actividad"/>
+                </tree>
+
+
+            </field>
+        </record>
+
+
+
+
+    <record id="crm_salon_form" model="ir.ui.view">
+        <field name="name">crm.salon.form</field>
+        <field name="model">crm.salon</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" type="object"
+                            string="Submit" states="draft"
+                            class="oe_highlight" invisible="context.get('is_modal')"/>
+                    <button name="action_submit" type="object"
+                            string="Retry" states="error"
+                            class="oe_highlight"/>
+                    <!-- <field name="state" widget="statusbar" statusbar_visible="draft,done"/> -->
+                <field name="state" nolabel="1" colspan="2" widget="statusbar" statusbar_visible="draft,open,done"/>
+
+                </header>
+                <sheet>
+                    
+                    <group>
+                        <group >
+                            <field name="name"/>
+                            <field name="nombre_salon"/>
+                            <field name="capacidad"/>
+                            <!-- <field name="company_id" /> -->
+                            <!-- groups="base.group_multi_company" -->
+                            <!-- <field name="state"/> -->
+                            <!-- <field name="lead_number" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="search_type" widget="radio" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="error" attrs="{'invisible': [('state', '!=', 'error')]}"/> -->
+                        </group>
+                      <!--   <group>
+                             <label for="date_begin" string="Fecha Alquiler"/>
+                                <div class="o_row">
+                                    <field name="date_begin" widget="daterange" nolabel="1" class="oe_inline" options="{'related_end_date': 'date_end'}"/>
+                                    <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"/>
+                                    <field name="date_end" widget="daterange" nolabel="1" class="oe_inline" options="{'related_start_date': 'date_begin'}"/>
+                                </div>
+                                <field name="company_id" />
+                        </group> -->
+                    </group>
+                  
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+   <!--  <record model="ir.ui.view" id="view_crm_salon_search">
+            <field name="name">crm.salo.search</field>
+            <field name="model">crm.salon</field>
+            <field name="arch" type="xml">
+                <search string="Reservaciones">
+                    <field name="nombre_salon" string="Evento"/>
+                    <field name="state"/>
+                </search>
+            </field>
+    </record> -->
+
+
+   <!--  <record  id="crm_salon_calendar_view" model="ir.ui.view">
+            <field name="name">crm.salon.calendar</field>
+            <field name="model">crm.salon</field>
+            <field name="priority" eval="2"/>
+            <field name="arch" type="xml">
+                <calendar string="Reservaciones"  date_start="date_begin" event_open_popup="true" color="state" mode="month" quick_add="False">
+                    <field name="nombre_salon"/>
+                    <field name="state" />
+                </calendar>
+            </field>
+        </record>
+ -->
+    <record id="crm_salon_tree" model="ir.ui.view">
+        <field name="name">crm.salon.tree</field>
+        <field name="model">crm.salon</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="nombre_salon"/>
+                <field name="state"/>
+         <!--        <field name="search_type"/>
+                <field name="country_ids" widget="many2many_tags"/>
+                <field name="team_id"/>
+                <field name="user_id"/>
+                <field name="tag_ids" widget="many2many_tags"/>
+                <field name="state" readonly="1"/> -->
+            </tree>
+        </field>
+    </record>
+
+  <!--   <record id="view_crm_salon_search" model="ir.ui.view">
+        <field name="name">crm.lead.search</field>
+        <field name="model">crm.lead</field>
+        <field name="arch" type="xml">
+            <search string="Salones Reservados">
+                <field name="salon_id"/>
+                <field name="stage_id"/>
+                <group expand="0" string="Group By">
+                        <filter string="Estado" name="stage_id" context="{'group_by': 'stage_id'}"/>
+                </group>
+ 
+            </search>
+        </field>
+    </record> -->
+
+    <record id="crm_salon_action" model="ir.actions.act_window">
+        <field name="name">Salones</field>
+        <field name="res_model">crm.salon</field>
+        <field name="view_mode">tree,form</field>
+        <!-- <field name="search_view_id" ref="view_crm_salon_search"/> -->
+        <!-- <field name="context">{"search_default_stage_id":1}</field>
+        <field name="search_view_id" ref="view_crm_salon_search"/> -->
+    </record>
+
+    <!-- This menu is display in CRM app when crm_iap_lead is installed-->
+   <!--  <menuitem
+        id="crm_menu_salones"
+        name="Salones"
+        parent="crm.crm_menu_config"
+        sequence="20"/> -->
+
+    <menuitem
+        id="crm_salones"
+        name="Salones"
+        parent="crm.crm_menu_config"
+        action="crm_salon_action"
+        
+        sequence="25"/>
+
+
+
+
+
+
+
+
+
+
+     <record id="crm_lead_form" model="ir.ui.view">
+        <field name="name">crm.lead.inherited.form</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form" />
+        <field name="arch" type="xml">
+            <field name="phone" position="after">
+
+                <!-- <field name="media" /> -->
+                <field name="partner_cumple_ids" context="{'partner_id':context.get('partner_id')}"  domain="[('parent_id', '=', partner_id)]" />
+<!--                 <field name="media" />
+ -->              <!--   <field name="partner_cumple_ids" />
+                <field name="media" /> -->
+            </field>
+            <field name="partner_id" position="replace">
+                <field name="partner_id" required="1" />
+            </field>
+            <field name="priority" position="after">
+                <field name="mobile" />
+                <field name="vendedor_id" />
+            </field>
+            <field name="user_id" position="replace">
+                <field name="user_id" invisible="1" />
+            </field>
+            <field name="tag_ids" position="replace">
+                <field name="tag_ids" invisible="1" />
+            </field>
+            <field name="vendedor_id" position="after">
+                <field name="tipo_venta"  />
+                
+            </field>
+            <field name="team_id" position="replace">
+                <field name="team_id" invisible="1" />
+            </field>
+            <field name="date_deadline" position="replace">
+                <field name="date_deadline" invisible="1" />
+            </field>
+            <field name="priority" position="replace">
+                <field name="priority" invisible="1" />
+            </field>
+            <field name="company_id" position="replace">
+                <field name="company_id" invisible="1" />
+            </field>
+            <field name="tipo_venta" position="after">
+                <!-- attrs="{'required': [('tipo_venta', '=', True)]}"  -->
+                <!-- domain="[('tipo_venta.genera_oportunidad', '=', True)]" -->
+                <!-- <group> -->
+                             <label for="date_begin" string="Fecha Alquiler"/>
+                                <div class="o_row">
+                                    <field name="date_begin" widget="daterange" nolabel="1" class="oe_inline" options="{'related_end_date': 'date_end'}" attrs="{'required': [('usa_oportunidad', '=', True)]}" />
+                                    <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"/>
+                                    <field name="date_end" widget="daterange" nolabel="1" class="oe_inline" options="{'related_start_date': 'date_begin'}" attrs="{'required': [('usa_oportunidad', '=', True)]}" />
+                                </div>
+                                <field name="paquete" domain="[('company_id', '=', company_id)]"  />
+                        <field name="cantidad_canchas" attrs="{'invisible': [('company_id', '=', 2)]}" />
+                        <!-- </group> -->
+            </field>
+            <field name="partner_cumple_ids" position="after" >
+                        <field name="salon_id" />
+                        <!-- <field name="paquete" domain="[('company_id', '=', company_id)]"  /> -->
+                        <field name="cantidad_invitados_c1"  attrs="{'invisible': [('company_id', '=', 2)]}"/>
+                        <field name="cantidad_invitados_c2" attrs="{'invisible': [('company_id', '=', 1)]}" />
+                        <!-- <field name="cantidad_canchas" attrs="{'invisible': [('company_id', '=', 2)]}" /> -->
+                        <field name="usa_oportunidad" invisible="1"/>
+                        <field name="sla_num" invisible="1"/>
+                    </field>
+
+            <field name="date_end" position="after" >       
+                    <button string="Reservaciones" name="view_reservations" lass="oe_stat_button" icon="fa-calendar"  type="object"  widget="statinfo"/>
+            </field>
+
+            <field name="description" position="after" >
+                <group>
+                <field name="ultima_actividad" invisible="1"/>
+            </group>
+            </field>
+
+            <xpath expr="//form/sheet/notebook/page[@name='lead']/group/group[1]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='lead']/group/group[2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='lead']/group/group[4]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='lead']/group/group[3]" position="attributes">
+                <attribute name="string">Contacto</attribute>
+            </xpath>
+
+
+
+            
+
+        </field>
+    </record>
+
+
+    <record id="crm_partner_form" model="ir.ui.view">
+        <field name="name">crm.partner.inherited.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <!-- <field name="vat" position="after">
+                <field name="fecha_nacimiento" />
+                <field name="edad" />
+            </field> -->
+            <!-- <field name="street" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field>
+            <field name="street2" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field> -->
+
+            <!-- <xpath expr="//form/sheet/div/group/group/label[@name='address_name']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath> -->
+            <!-- <xpath expr="//form/sheet/div/div/label[@name='address_name']" position="attributes">
+                    <attribute name="string">My Company</attribute>
+                </xpath> -->
+
+
+             <xpath expr="//group/group/label[@name='address_name']" position="attributes">
+                <attribute name="string">Tipo de Contacto</attribute>
+                </xpath>
+
+            <xpath expr="//group/group/label[@name='address_name']" position="attributes">
+                <!-- <attribute name="string">Tipo de Contacto</attribute> -->
+                <attribute name="invisible">1</attribute>
+                </xpath>
+
+            <!-- <xpath expr="//group/group/label[@name='tipo_contacto']" position="attributes">
+                <attribute name="invisible">1</attribute>
+                </xpath> -->
+
+            <xpath expr="//field[@name='street']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='street2']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+           <!--  <xpath expr="//label[@string='Company Address']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath> -->
+
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/field[@name='type']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='email']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='phone']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='mobile']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='street']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='street2']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='city']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='state_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='zip']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='country_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='comment']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="/form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/label[@for='street']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="/form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='name']" position="after">
+                <!-- <attribute name="string">Fecha de Nacimiento</attribute> -->
+                <field name="fecha_nacimiento"  />
+                <field name="edad" invisible="0" />
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='image_1920']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='child_ids']/form/sheet/group/group/field[@name='image_1920']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='sales_purchases']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+
+            
+            <field name="street2" position="after">
+                <field name="tipo_contacto"  invisible="1" />
+                <!-- <group>
+                <field name="ruc" attrs="{'invisible': [('company_type', '=', 'person')]}"  />
+                <field name="div" attrs="{'invisible': [('company_type', '=', 'person')]}" />
+                </group> -->
+            </field>
+
+
+            <label for="" name="address_name" position="before">
+            <!-- <field name="field_name"/> -->
+            <field name="ruc" attrs="{'invisible': [('company_type', '=', 'person')]}"  />
+            <!-- <label for="ruc" attrs="{'invisible': [('company_type', '=', 'person')]}" /> -->
+            <field name="div" attrs="{'invisible': [('company_type', '=', 'person')]}" />
+            <!-- <label for="div" attrs="{'invisible': [('company_type', '=', 'person')]}" /> -->
+        </label>
+
+
+            <field name="parent_id" position="replace">
+                <field name="parent_id" invisible="1" />
+            </field>
+            <field name="type" position="replace">
+                <field name="type" invisible="1" />
+            </field>
+            <field name="website" position="replace">
+                <field name="website" invisible="1" />
+            </field>
+            <field name="vat" position="replace">
+                <field name="vat" invisible="1" />
+            </field>
+            <field name="category_id" position="replace">
+                <field name="category_id" invisible="1" />
+            </field>
+            
+
+
+            <field name="city" position="replace">
+                <field name="city" invisible="1" />
+            </field>
+            <field name="state_id" position="replace">
+                <field name="state_id" invisible="1" />
+            </field>
+            <field name="zip" position="replace">
+                <field name="zip" invisible="1" />
+            </field>
+            <field name="country_id" position="replace">
+                <field name="country_id" invisible="1" />
+            </field>
+            <field name="function" position="replace">
+                <field name="function" invisible="1" />
+            </field>
+            <field name="company_type" position="replace">
+                <field name="company_type" invisible="0" widget="radio" options="{'horizontal': true}" />
+            </field>
+            <field name="title" position="after">
+                <field name="fecha_nacimiento" invisible="0" />
+            </field>
+            <field name="fecha_nacimiento" position="after">
+                <field name="user_create" invisible="0"  readonly="1"/>
+            </field>
+            <!-- <field name="street2" position="after">
+                <field name="title" />
+            </field> -->
+            <!-- <field name="street" position="replace">
+                <field name="street" invisible="1" />
+            </field> -->
+          <!--   <field name="street2" position="replace">
+                <field name="street2" invisible="1" />
+            </field> -->
+
+            <!-- <xpath expr="//label[@for='street']" position="attributes">  -->
+                <!-- <attribute name="groups">sale.group_delivery_invoice_address</attribute>  -->
+               <!--  <attribute name="string">Direccion</attribute> 
+            </xpath>  -->
+
+             
+
+
+            
+
+
+            <!-- <field name="street" position="after">
+                <field name="phone" />
+                <field name="title" />
+            </field> -->
+
+
+
+            <!-- <field name="mobile" position="attributes">
+                <field name="street" />
+            </field> -->
+
+        </field>
+    </record>
+
+
+    <!-- <record id="crm_partner_form" model="ir.ui.view">
+        <field name="name">crm.partner.inherited.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_short_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//label[@for='street']" position="attributes"> 
+                <attribute name="invisible">ireccion</attribute> 
+            </xpath> 
+
+        </field>
+    </record> -->
+
+
+
+        <record id="crm_tipo_venta_form" model="ir.ui.view">
+        <field name="name">crm.tipo.venta.form</field>
+        <field name="model">crm.tipo.venta</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                </header>
+                <sheet>
+                    
+                    <group>
+                        <group >
+                            <field name="name" required="1"/>
+                            <field name="genera_oportunidad" />
+                            <field name="dias_generacion"/>
+                             </group>
+                 
+                    </group>
+                  
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="crm_tipo_venta_tree" model="ir.ui.view">
+        <field name="name">crm.tipo_venta.tree</field>
+        <field name="model">crm.tipo.venta</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="genera_oportunidad"/>
+                <field name="dias_generacion"/>
+     
+            </tree>
+        </field>
+    </record>
+
+    <record id="crm_tipo_venta_action" model="ir.actions.act_window">
+        <field name="name">Tipo de venta</field>
+        <field name="res_model">crm.tipo.venta</field>
+        <field name="view_mode">tree,form</field>
+
+    </record>
+
+    <menuitem
+        id="crm_tipo_venta"
+        name="Tipo Venta"
+        parent="crm.crm_menu_config"
+        action="crm_tipo_venta_action"
+        sequence="35"/>
+
+
+    <record id="crm_tipo_contacto_form" model="ir.ui.view">
+        <field name="name">crm.tipo.contacto.form</field>
+        <field name="model">crm.tipo.contacto</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                </header>
+                <sheet>
+                    
+                    <group>
+                        <group >
+                            <field name="name" required="1"/>
+                      <!--       <field name="genera_oportunidad"/>
+                            <field name="dias_generacion"/> -->
+                             </group>
+                 
+                    </group>
+                  
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="crm_tipo_contacto_tree" model="ir.ui.view">
+        <field name="name">crm.contacto.tree</field>
+        <field name="model">crm.tipo.contacto</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+           <!--      <field name="genera_oportunidad"/>
+                <field name="dias_generacion"/> -->
+     
+            </tree>
+        </field>
+    </record>
+
+    <record id="crm_tipo_contacto_action" model="ir.actions.act_window">
+        <field name="name">Tipo de Contacto</field>
+        <field name="res_model">crm.tipo.contacto</field>
+        <field name="view_mode">tree,form</field>
+
+    </record>
+
+    <menuitem
+        id="crm_tipo_contacto"
+        name="Tipo Contacto"
+        parent="crm.crm_menu_config"
+        action="crm_tipo_contacto_action"
+        sequence="36"/>
+
+    <menuitem
+        id="crm_media"
+        name="Media"
+        parent="crm.crm_menu_config"
+        action="utm.utm_medium_action"
+        sequence="35"/>
+
+
+    <record id="crm_vendedor_form" model="ir.ui.view">
+        <field name="name">crm.vendedor.form</field>
+        <field name="model">crm.vendedor</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                </header>
+                <sheet>
+                    
+                    <group>
+                        <group >
+                            <field name="name" required="1"/>
+                            <field name="correo" required="1" />
+                      <!--       <field name="genera_oportunidad"/>
+                            <field name="dias_generacion"/> -->
+                             </group>
+                 
+                    </group>
+                  
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="crm_vendedor_tree" model="ir.ui.view">
+        <field name="name">crm.vendedor.tree</field>
+        <field name="model">crm.vendedor</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="correo"/>
+           <!--      <field name="genera_oportunidad"/>
+                <field name="dias_generacion"/> -->
+     
+            </tree>
+        </field>
+    </record>
+
+    <record id="crm_vendedor_action" model="ir.actions.act_window">
+        <field name="name">Vendedor</field>
+        <field name="res_model">crm.vendedor</field>
+        <field name="view_mode">tree,form</field>
+
+    </record>
+
+    <menuitem
+        id="crm_vendedor"
+        name="Vendedor"
+        parent="crm.crm_menu_config"
+        action="crm_vendedor_action"
+        sequence="37"/>
+
+
+    <!-- <record id="crm_lead_view_dashboard_view_new" model="ir.ui.view">
+            <field name="name">crm.lead.view.dashboard.lead.inherit.new</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm_enterprise.crm_opportunity_view_dashboard"/>
+            <field name="arch" type="xml">
+                <xpath expr="view[@type='cohort']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+ -->
+
+
+
+</odoo>
