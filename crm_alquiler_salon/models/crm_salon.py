@@ -150,15 +150,15 @@ class Lead(models.Model):
         crm_ids = self.search([])
         for det in crm_ids:
             # fecha_ultimo_write = det.write_date
-
-            fecha_ultimo_write_str = det.write_date.strftime('%Y-%m-%d')
-            fecha_ultimo_write = datetime.strptime(fecha_ultimo_write_str,'%Y-%m-%d')
-            dias_diferencia = date.today() - fecha_ultimo_write.date()
-            if dias_diferencia.days == 3:
-                det.write({'sla_num':1})
-                template_id = self.env.ref('crm_alquiler_salon.email_template_recordatorio_vendedor_mail').id
-                template = self.env['mail.template'].browse(template_id)
-                template.send_mail(det.id, force_send=True)
+            if det.won_status == 'pending':
+                fecha_ultimo_write_str = det.write_date.strftime('%Y-%m-%d')
+                fecha_ultimo_write = datetime.strptime(fecha_ultimo_write_str,'%Y-%m-%d')
+                dias_diferencia = date.today() - fecha_ultimo_write.date()
+                if dias_diferencia.days == 3:
+                    det.write({'sla_num':1})
+                    template_id = self.env.ref('crm_alquiler_salon.email_template_recordatorio_vendedor_mail').id
+                    template = self.env['mail.template'].browse(template_id)
+                    template.send_mail(det.id, force_send=True)
 
     @api.model
     def recordatorio_vendedor_1(self):
@@ -166,15 +166,15 @@ class Lead(models.Model):
         crm_ids = self.search([])
         for det in crm_ids:
             # fecha_ultimo_write = det.write_date
-
-            fecha_ultimo_write_str = det.write_date.strftime('%Y-%m-%d')
-            fecha_ultimo_write = datetime.strptime(fecha_ultimo_write_str,'%Y-%m-%d')
-            dias_diferencia = date.today() - fecha_ultimo_write.date()
-            if dias_diferencia.days == 0:
-                det.write({'sla_num':1})
-                template_id = self.env.ref('crm_alquiler_salon.email_template_recordatorio_vendedor_mail').id
-                template = self.env['mail.template'].browse(template_id)
-                template.send_mail(det.id, force_send=True)
+            if det.won_status == 'pending':
+                fecha_ultimo_write_str = det.write_date.strftime('%Y-%m-%d')
+                fecha_ultimo_write = datetime.strptime(fecha_ultimo_write_str,'%Y-%m-%d')
+                dias_diferencia = date.today() - fecha_ultimo_write.date()
+                if dias_diferencia.days == 0:
+                    det.write({'sla_num':1})
+                    template_id = self.env.ref('crm_alquiler_salon.email_template_recordatorio_vendedor_mail').id
+                    template = self.env['mail.template'].browse(template_id)
+                    template.send_mail(det.id, force_send=True)
 
 
 
