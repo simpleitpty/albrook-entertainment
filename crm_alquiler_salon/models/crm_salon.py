@@ -161,6 +161,31 @@ class Lead(models.Model):
                     template.send_mail(det.id, force_send=True)
 
     @api.model
+    def archive_lead_won(self):
+        # import pdb
+        # pdb.set_trace()
+       
+        crm_ids = self.search([])
+        date_now = datetime.now()
+        
+        for det in crm_ids:
+            # fecha_ultimo_write = det.write_date
+            if det.won_status == 'won':
+                date_won = det.date_closed
+                total_days = int(str(date_now.day - date_won.day))
+                if total_days >= 31:
+                    self.env['crm.lead'].browse(det.id).write({'active':False})
+
+                # fecha_ultimo_write_str = det.write_date.strftime('%Y-%m-%d')
+                # fecha_ultimo_write = datetime.strptime(fecha_ultimo_write_str,'%Y-%m-%d')
+                # dias_diferencia = date.today() - fecha_ultimo_write.date()
+                # if dias_diferencia.days == 3:
+                #     det.write({'sla_num':1})
+                #     template_id = self.env.ref('crm_alquiler_salon.email_template_recordatorio_vendedor_mail').id
+                #     template = self.env['mail.template'].browse(template_id)
+                #     template.send_mail(det.id, force_send=True)
+
+    @api.model
     def recordatorio_vendedor_1(self):
       
         crm_ids = self.search([])
